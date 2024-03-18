@@ -28,21 +28,23 @@ function displayNum(e) {
     display.textContent += e.target.textContent;
 }
 
-function clear() {
+function allClearMemory() {
     reset = true;
     clearDisplay = true;
     display.textContent = "0";
+    displayComp.textContent = "";
 }
 
+let displayComp = document.querySelector("#display-comp");
 let display = document.querySelector("#display");
 let nums = document.querySelectorAll(".num");
 let operators = document.querySelectorAll(".operator");
+let allClearBtn = document.querySelector("#all-clear");
 let clearBtn = document.querySelector("#clear");
-let delBtn = document.querySelector("#delete");
 operators.forEach(op => op.addEventListener("click", opClicked)); 
 nums.forEach(num => num.addEventListener("click", displayNum));
-clearBtn.addEventListener("click", clear);
-delBtn.addEventListener("click", () => display.textContent = display.textContent.slice(0, -1));
+allClearBtn.addEventListener("click", allClearMemory);
+clearBtn.addEventListener("click", () => display.textContent = "0");
 
 let a;                   // running total
 let b;
@@ -59,6 +61,7 @@ function opClicked(e) {
 
         op = e.target.textContent;
         a = +display.textContent;
+        displayComp.textContent = `${a} ${op}`;
         clearDisplay = false;
         reset = false;
         return
@@ -68,6 +71,10 @@ function opClicked(e) {
     // sets op to last operator clicked
     if(!clearDisplay) {
         op = e.target.textContent;
+
+        // the display computation text is dependent on the operator
+        displayComp.textContent = displayComp.textContent.slice(0, -1) + op;
+        if (op === "=") displayComp.textContent = displayComp.textContent.slice(0, -1);
 
         // setting reset variable if op is "="
         reset = op === "=" ? true : false;
@@ -83,4 +90,11 @@ function opClicked(e) {
     if(op === "=") reset = true;
     // flag to clear display
     clearDisplay = false;
+
+    // display computations
+    if (op === "=") {
+        displayComp.textContent += ` ${b} ${op}`;
+    } else {
+        displayComp.textContent = `${a} ${op}`;
+    }
 }
