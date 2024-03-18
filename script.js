@@ -7,6 +7,10 @@ function operate(op, a, b) {
         case "*":
             return a * b;
         case "/":
+            if (b === 0) {
+                reset = true;
+                return("ERROR")
+            }
             return a / b;
     }
 }
@@ -50,7 +54,7 @@ function opClicked(e) {
     // for the first operator used or first operator used after clicking "="
     if(reset) {
         // checks for user input
-        if(display.textContent === "") return;
+        if(display.textContent === "" || display.textContent === "ERROR") return;
         if(e.target.textContent === "=") return;
 
         op = e.target.textContent;
@@ -64,7 +68,7 @@ function opClicked(e) {
     // sets op to last operator clicked
     if(!clearDisplay) {
         op = e.target.textContent;
-        
+
         // setting reset variable if op is "="
         reset = op === "=" ? true : false;
         return;
