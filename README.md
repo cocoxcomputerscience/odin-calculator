@@ -6,5 +6,7 @@ This project incorporates:<br>
 &emsp;- CSS flex<br>
 &emsp;- Events and event listeners<br>
 <br>
-Compared to previous projects, not much new material was used. Instead, this project primarily focuesed on dealing with logic errors. Thus, this project made me debug Javascript using google chrome dev tools. It allowed me to gain a better understanding on how to debug more efficiently.<<br>>
+Compared to previous projects, not much new material was used. Instead, this project primarily focused on dealing with logic errors. Thus, this project made me debug Javascript using google chrome dev tools. It allowed me to gain a better understanding on how to debug more efficiently.<br>
 <br>
+Preview:<br>
+<img width="516" alt="Screen Shot 2024-03-19 at 05 03 21" src="https://github.com/cocoxcomputerscience/odin-calculator/assets/120235563/d896d66c-cfba-4874-8e03-14e48e12f38e">
