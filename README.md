@@ -9,4 +9,5 @@ This project incorporates:<br>
 Compared to previous projects, not much new material was used. Instead, this project primarily focused on dealing with logic errors. Thus, this project made me debug Javascript using google chrome dev tools. It allowed me to gain a better understanding on how to debug more efficiently.<br>
 <br>
 Preview:<br>
-<img width="516" alt="Screen Shot 2024-03-19 at 05 03 21" src="https://github.com/cocoxcomputerscience/odin-calculator/assets/120235563/d896d66c-cfba-4874-8e03-14e48e12f38e">
+
+<img width="453" alt="Screen Shot 2024-03-19 at 05 27 14" src="https://github.com/cocoxcomputerscience/odin-calculator/assets/120235563/dd8517cb-230d-4cac-a646-6ad910b1263b">
