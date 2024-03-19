@@ -15,18 +15,18 @@ function operate(op, a, b) {
     }
 }
 
-function displayNum(e) {
+function updateDisplay(e) {
     // run if text was not displayed using this function (displayed from clicking an operator)
-    if(clear) {
-        display.textContent = "0";
-        clear = false;
+    if (!clear) {
+        display.textContent = DISPLAY_DEFAULT;
+        clear = true;
         decimal = false
     }
 
     // do not want leading zeros unless the input is a decimal
-    if (display.textContent === "0") {
+    if (display.textContent === DISPLAY_DEFAULT) {
         if (e.target.textContent === ".") {
-            display.textContent = "0.";
+            display.textContent += e.target.textContent;
             decimal = true;
         } else {
             display.textContent = e.target.textContent;
@@ -41,37 +41,14 @@ function displayNum(e) {
     display.textContent += e.target.textContent;
 }
 
-function allClearMemory() {
+function clearAll() {
     reset = true;
-    clear = false;
-    display.textContent = "0";
-    displayComp.textContent = "";
+    clear = true;
+    display.textContent = DISPLAY_DEFAULT;
+    displayComp.textContent = DISPLAY_COMP_DEFAULT;
 }
 
-let displayComp = document.querySelector("#display-comp");
-let display = document.querySelector("#display");
-let nums = document.querySelectorAll(".num");
-let decimalBtn = document.querySelector("#decimal");
-let operators = document.querySelectorAll(".operator");
-let allClearBtn = document.querySelector("#all-clear");
-let clearBtn = document.querySelector("#clear");
-operators.forEach(op => op.addEventListener("click", opClicked)); 
-nums.forEach(num => num.addEventListener("click", displayNum));
-decimalBtn.addEventListener("click", displayNum);
-allClearBtn.addEventListener("click", allClearMemory);
-clearBtn.addEventListener("click", () => {
-    display.textContent = "0";
-    decimal = false;
-});
-
-let a;                   // running total
-let b;
-let op; 
-let reset = true;        // flag for first operator used
-let clear = false;       // flag for clearing display. Is true if display needs to be cleared
-let decimal = false;     // flag for if input contains decimal
-
-function opClicked(e) {
+function executeOperator(e) {
     // for the first operator used or first operator used after clicking "="
     if(reset) {
         // checks for user input
@@ -81,14 +58,14 @@ function opClicked(e) {
         op = e.target.textContent;
         a = +display.textContent;
         displayComp.textContent = `${a} ${op}`;
-        clear = true;
+        clear = false;
         reset = false;
         return
     }
 
     // returns if operators are clicked repeatedly
     // sets op to last operator clicked
-    if(clear) {
+    if(!clear) {
         op = e.target.textContent;
 
         // the display computation text is dependent on the last operator
@@ -108,7 +85,7 @@ function opClicked(e) {
     // flag to reset
     if(op === "=") reset = true;
     // flag to clear display
-    clear = true;
+    clear = false;
 
     // display computations
     if (op === "=") {
@@ -117,3 +94,28 @@ function opClicked(e) {
         displayComp.textContent = `${a} ${op}`;
     }
 }
+
+const DISPLAY_DEFAULT = "0";
+const DISPLAY_COMP_DEFAULT = "";
+let a;                   // running total
+let b;                   // second operand
+let op;                  // operator
+let reset = true;        // flag for resetting math operation
+let clear = true;        // flag for if the display was/was not updated by updateDisplay function
+let decimal = false;     // flag for if user input contains decimal
+
+let displayComp = document.querySelector("#display-comp");
+let display = document.querySelector("#display");
+let nums = document.querySelectorAll(".num");
+let operators = document.querySelectorAll(".operator");
+let decimalBtn = document.querySelector("#decimal");
+let allClearBtn = document.querySelector("#all-clear");
+let clearBtn = document.querySelector("#clear");
+nums.forEach(num => num.addEventListener("click", updateDisplay));
+operators.forEach(op => op.addEventListener("click", executeOperator)); 
+decimalBtn.addEventListener("click", updateDisplay);
+allClearBtn.addEventListener("click", clearAll);
+clearBtn.addEventListener("click", () => {
+    display.textContent = DISPLAY_DEFAULT;
+    decimal = false;
+});
