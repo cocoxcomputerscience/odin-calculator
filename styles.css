@@ -55,11 +55,13 @@ main {
     padding: 10px;
     border: 5px solid #c24d2c;
     background-color: #d9dad7;
-    font-size: 20px;
+    font-size: 18px;
 }
 
-#display-comp {
-    font-size: 16px;;
+#display-computation {
+    font-size: 14px;
+    text-align: right;
+    color: #333333;
 }
 
 /* button container */

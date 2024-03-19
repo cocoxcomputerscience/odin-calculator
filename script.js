@@ -5,8 +5,10 @@ function operate(op, a, b) {
         case "-":
             return a - b;
         case "x":
+        case "*":
             return a * b;
         case "÷":
+        case "/":
             if (b === 0) {
                 reset = true;
                 return("ERROR")
@@ -16,6 +18,9 @@ function operate(op, a, b) {
 }
 
 function updateDisplay(e) {
+    // the input value changes depending on the event
+    let input = e.type === "click" ? e.target.textContent : e.key;
+
     // run if text was not displayed using this function (displayed from clicking an operator)
     if (!clear) {
         display.textContent = DISPLAY_DEFAULT;
@@ -28,33 +33,37 @@ function updateDisplay(e) {
 
     // do not want leading zeros unless the input is a decimal
     if (display.textContent === DISPLAY_DEFAULT) {
-        if (e.target.textContent === ".") {
-            display.textContent += e.target.textContent;
+        if (input === ".") {
+            display.textContent += input;
             decimal = true;
         } else {
-            display.textContent = e.target.textContent;
+            display.textContent = input;
         }
         return;
     }
 
     // checks for a decimal in the input
-    if (e.target.textContent === "." && decimal) return;
-    if (e.target.textContent === ".") decimal = true;
+    if (input === "." && decimal) return;
+    if (input === ".") decimal = true;
 
-    display.textContent += e.target.textContent;
+    display.textContent += input;
 }
 
 function executeOperator(e) {
+    // the input value changes depending on the event
+    let input = (e.type === "click") ? e.target.textContent : e.key;
+    if (input === "Enter") input = "=";
+
     // run if this is the fist operator used or the first operator used after clicking "=" 
-    if(reset) {
+    if (reset) {
         // checks for user input
         if(display.textContent === "ERROR") return;
-        if(e.target.textContent === "=") return;
+        if(input === "=") return;
 
-        op = e.target.textContent;
+        op = input;
         a = display.textContent;
 
-        displayComp.textContent = `${a} ${op}`;
+        displayComputation.textContent = `${a} ${op}`;
         clear = false;
         reset = false;
         return
@@ -63,11 +72,11 @@ function executeOperator(e) {
     // returns if operators are clicked repeatedly
     // sets op to last operator clicked
     if(!clear) {
-        op = e.target.textContent;
+        op = input;
 
         // the display computation text is dependent on the last operator
-        displayComp.textContent = displayComp.textContent.slice(0, -1) + op;
-        if (op === "=") displayComp.textContent = displayComp.textContent.slice(0, -1);
+        displayComputation.textContent = displayComputation.textContent.slice(0, -1) + op;
+        if (op === "=") displayComputation.textContent = displayComputation.textContent.slice(0, -1);
 
         // setting reset variable if op is "="
         reset = op === "=" ? true : false;
@@ -76,7 +85,7 @@ function executeOperator(e) {
 
     b = display.textContent;
     a = operate(op, +a, +b).toString();
-    op = e.target.textContent;
+    op = input;
     display.textContent = a;
 
     // flag to reset
@@ -86,14 +95,19 @@ function executeOperator(e) {
 
     // display computations
     if (op === "=") {
-        displayComp.textContent += ` ${b} ${op}`;
+        displayComputation.textContent += ` ${b} ${op}`;
     } else {
-        displayComp.textContent = `${a} ${op}`;
+        displayComputation.textContent = `${a} ${op}`;
     }
 }
 
+function clearDisplay() {
+    display.textContent = DISPLAY_DEFAULT;
+    decimal = false;
+}
+
 const DISPLAY_DEFAULT = "0";
-const DISPLAY_COMP_DEFAULT = "";
+const DISPLAY_COMPUTATION_DEFAULT = "";
 let a;                   // running total  ; string
 let b;                   // second operand ; string
 let op;                  // operator
@@ -101,7 +115,7 @@ let reset = true;        // flag for resetting math operation
 let clear = true;        // flag for if the display was/was not updated by updateDisplay function
 let decimal = false;     // flag for if user input contains decimal
 
-let displayComp = document.querySelector("#display-comp");
+let displayComputation = document.querySelector("#display-computation");
 let display = document.querySelector("#display");
 let nums = document.querySelectorAll(".num");
 let decimalBtn = document.querySelector("#decimal");
@@ -116,9 +130,15 @@ allClearBtn.addEventListener("click", () => {
     reset = true;
     clear = true;
     display.textContent = DISPLAY_DEFAULT;
-    displayComp.textContent = DISPLAY_COMP_DEFAULT;
+    displayComputation.textContent = DISPLAY_COMPUTATION_DEFAULT;
 });
-clearBtn.addEventListener("click", () => {
-    display.textContent = DISPLAY_DEFAULT;
-    decimal = false;
+clearBtn.addEventListener("click", clearDisplay);
+document.addEventListener("keydown", (e) => {
+    if (!isNaN(e.key) || e.key === ".") {
+        updateDisplay(e);
+    } else if (e.key === "/" || e.key === "-" || e.key === "=" || e.key === "*" || e.key === "+" || e.key === "Enter") {
+        executeOperator(e);
+    } else if(e.key === "Backspace") {
+        clearDisplay();
+    }
 });
