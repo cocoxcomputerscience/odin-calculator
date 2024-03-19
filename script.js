@@ -44,18 +44,11 @@ function updateDisplay(e) {
     display.textContent += e.target.textContent;
 }
 
-function clearAll() {
-    reset = true;
-    clear = true;
-    display.textContent = DISPLAY_DEFAULT;
-    displayComp.textContent = DISPLAY_COMP_DEFAULT;
-}
-
 function executeOperator(e) {
-    // for the first operator used or first operator used after clicking "="
+    // run if this is the fist operator used or the first operator used after clicking "=" 
     if(reset) {
         // checks for user input
-        if(display.textContent === "" || display.textContent === "ERROR") return;
+        if(display.textContent === "ERROR") return;
         if(e.target.textContent === "=") return;
 
         op = e.target.textContent;
@@ -111,14 +104,20 @@ let decimal = false;     // flag for if user input contains decimal
 let displayComp = document.querySelector("#display-comp");
 let display = document.querySelector("#display");
 let nums = document.querySelectorAll(".num");
-let operators = document.querySelectorAll(".operator");
 let decimalBtn = document.querySelector("#decimal");
+let operators = document.querySelectorAll(".operator");
 let allClearBtn = document.querySelector("#all-clear");
 let clearBtn = document.querySelector("#clear");
+
 nums.forEach(num => num.addEventListener("click", updateDisplay));
-operators.forEach(op => op.addEventListener("click", executeOperator)); 
 decimalBtn.addEventListener("click", updateDisplay);
-allClearBtn.addEventListener("click", clearAll);
+operators.forEach(op => op.addEventListener("click", executeOperator)); 
+allClearBtn.addEventListener("click", () => {
+    reset = true;
+    clear = true;
+    display.textContent = DISPLAY_DEFAULT;
+    displayComp.textContent = DISPLAY_COMP_DEFAULT;
+});
 clearBtn.addEventListener("click", () => {
     display.textContent = DISPLAY_DEFAULT;
     decimal = false;
