@@ -23,6 +23,9 @@ function updateDisplay(e) {
         decimal = false
     }
 
+    // limits display length
+    if (display.textContent.length === 20) return;
+
     // do not want leading zeros unless the input is a decimal
     if (display.textContent === DISPLAY_DEFAULT) {
         if (e.target.textContent === ".") {
@@ -56,7 +59,8 @@ function executeOperator(e) {
         if(e.target.textContent === "=") return;
 
         op = e.target.textContent;
-        a = +display.textContent;
+        a = display.textContent;
+
         displayComp.textContent = `${a} ${op}`;
         clear = false;
         reset = false;
@@ -77,8 +81,8 @@ function executeOperator(e) {
         return;
     }
 
-    b = +display.textContent;
-    a = operate(op, a, b);
+    b = display.textContent;
+    a = operate(op, +a, +b).toString();
     op = e.target.textContent;
     display.textContent = a;
 
@@ -89,7 +93,7 @@ function executeOperator(e) {
 
     // display computations
     if (op === "=") {
-        displayComp.textContent += ` ${b} ${op} ${a}`;
+        displayComp.textContent += ` ${b} ${op}`;
     } else {
         displayComp.textContent = `${a} ${op}`;
     }
@@ -97,8 +101,8 @@ function executeOperator(e) {
 
 const DISPLAY_DEFAULT = "0";
 const DISPLAY_COMP_DEFAULT = "";
-let a;                   // running total
-let b;                   // second operand
+let a;                   // running total  ; string
+let b;                   // second operand ; string
 let op;                  // operator
 let reset = true;        // flag for resetting math operation
 let clear = true;        // flag for if the display was/was not updated by updateDisplay function
