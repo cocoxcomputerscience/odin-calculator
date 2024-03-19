@@ -4,9 +4,9 @@ function operate(op, a, b) {
             return a + b;
         case "-":
             return a - b;
-        case "*":
+        case "x":
             return a * b;
-        case "/":
+        case "÷":
             if (b === 0) {
                 reset = true;
                 return("ERROR")
